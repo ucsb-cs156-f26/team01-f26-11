@@ -9,12 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RepositoryRestResource(exported = false)
 public interface ArticlesRepository extends CrudRepository<Articles, Long> {
-  /**
-   * This method returns all Articles entities with a given ???.
-   *
-   * @param quarterYYYYQ quarter in the format YYYYQ (e.g. 20241 for Winter 2024, 20242 for Spring
-   *     2024, 20243 for Summer 2024, 20244 for Fall 2024)
-   * @return all UCSBDate entities with a given quarterYYYYQ
-   */
-  Iterable<UCSBDate> findAllByQuarterYYYYQ(String quarterYYYYQ);
+
 }
