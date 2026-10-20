@@ -4,15 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * This is a JPA entity that represents an Article
- */
+/** This is a JPA entity that represents an Article */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,5 +19,4 @@ public class Articles {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-
 }
