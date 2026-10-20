@@ -2,8 +2,8 @@
     "databaseChangeLog": [
       {
         "changeSet": {
-          "id": "UCSBDates-1",
-          "author": "YourGitHubID",
+          "id": "articles-1",
+          "author": "nrrevell",
           "preConditions": [
             {
               "onFail": "MARK_RAN"
@@ -52,7 +52,7 @@
                     }
                   }
                 ],
-                "tableName": "UCSBDATES"
+                "tableName": "articles"
               }
             }
           ]
