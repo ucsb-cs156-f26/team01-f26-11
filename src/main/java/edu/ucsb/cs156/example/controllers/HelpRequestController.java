@@ -111,13 +111,9 @@ public class HelpRequestController extends ApiController {
   /**
    * Update a single help request
    *
-   * @param requesterEmail the email of the requester
-   * @param teamId the team
-   * @param tableOrBreakoutRoom the table or breakout room
-   * @param requestTime the date of the request
-   * @param explanation the explanation
-   * @param solved if the request is solved
-   * @return the saved request
+   * @param id id of the help request to update
+   * @param incoming the new help request
+   * @return the updated help request
    */
   @Operation(summary = "Update a single help request")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
