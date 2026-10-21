@@ -1,7 +1,6 @@
-package main.java.edu.ucsb.cs156.example.controllers;
+package edu.ucsb.cs156.example.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import edu.ucsb.cs156.example.controllers.ApiController;
 import edu.ucsb.cs156.example.entities.Articles;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 import io.swagger.v3.oas.annotations.Operation;
