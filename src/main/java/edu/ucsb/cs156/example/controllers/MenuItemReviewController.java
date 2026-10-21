@@ -61,7 +61,7 @@ public class MenuItemReviewController extends ApiController {
    * Create a new menu item review
    *
    * @param itemid the id of the item being reviewed
-   * @param revierEmail the email of whomever submitted the review
+   * @param reviewerEmail the email of whomever submitted the review
    * @param stars the star rating given
    * @param dateReviewed the date of the review
    * @param comments any comments on the review
