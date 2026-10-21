@@ -111,13 +111,9 @@ import org.springframework.web.bind.annotation.RestController;
   /**
    * Update a single help request
    *
-   * @param requesterEmail the email of the requester
-   * @param teamId the team
-   * @param tableOrBreakoutRoom the table or breakout room
-   * @param requestTime the date of the request
-   * @param explanation the explanation
-   * @param solved if the request is solved
-   * @return the saved request
+   * @param id id of the help request to update
+   * @param incoming the new help request
+   * @return the updated help request
    */
   @Operation(summary = &quot;Update a single help request&quot;)
   @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
@@ -125,21 +121,21 @@ import org.springframework.web.bind.annotation.RestController;
   public HelpRequest updateHelpRequest(
       @Parameter(name = &quot;id&quot;) @RequestParam Long id, @RequestBody @Valid HelpRequest incoming) {
 
-<span class="fc" id="L128">    HelpRequest helpRequest =</span>
+<span class="fc" id="L124">    HelpRequest helpRequest =</span>
         helpRequestRepository
-<span class="fc" id="L130">            .findById(id)</span>
-<span class="fc" id="L131">            .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
+<span class="fc" id="L126">            .findById(id)</span>
+<span class="fc" id="L127">            .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
 
-<span class="fc" id="L133">    helpRequest.setRequesterEmail(incoming.getRequesterEmail());</span>
-<span class="fc" id="L134">    helpRequest.setTeamId(incoming.getTeamId());</span>
-<span class="fc" id="L135">    helpRequest.setTableOrBreakoutRoom(incoming.getTableOrBreakoutRoom());</span>
-<span class="fc" id="L136">    helpRequest.setRequestTime(incoming.getRequestTime());</span>
-<span class="fc" id="L137">    helpRequest.setExplanation(incoming.getExplanation());</span>
-<span class="fc" id="L138">    helpRequest.setSolved(incoming.getSolved());</span>
+<span class="fc" id="L129">    helpRequest.setRequesterEmail(incoming.getRequesterEmail());</span>
+<span class="fc" id="L130">    helpRequest.setTeamId(incoming.getTeamId());</span>
+<span class="fc" id="L131">    helpRequest.setTableOrBreakoutRoom(incoming.getTableOrBreakoutRoom());</span>
+<span class="fc" id="L132">    helpRequest.setRequestTime(incoming.getRequestTime());</span>
+<span class="fc" id="L133">    helpRequest.setExplanation(incoming.getExplanation());</span>
+<span class="fc" id="L134">    helpRequest.setSolved(incoming.getSolved());</span>
 
-<span class="fc" id="L140">    helpRequestRepository.save(helpRequest);</span>
+<span class="fc" id="L136">    helpRequestRepository.save(helpRequest);</span>
 
-<span class="fc" id="L142">    return helpRequest;</span>
+<span class="fc" id="L138">    return helpRequest;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
