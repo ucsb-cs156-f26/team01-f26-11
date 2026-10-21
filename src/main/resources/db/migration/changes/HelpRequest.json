@@ -59,6 +59,12 @@
                   },
                   {
                     "column": {
+                      "name": "EXPLANATION",
+                      "type": "VARCHAR(255)"
+                    }
+                  },
+                  {
+                    "column": {
                       "name": "SOLVED",
                       "type": "BOOLEAN"
                     }
