@@ -6,10 +6,14 @@ import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -85,20 +89,19 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
    * @param id id of the restaurant to delete
    * @return a message indicating that the restaurant was deleted
    */
-  /*
-  @Operation(summary = "Delete a Restaurant")
+  @Operation(summary = "Delete a UCSBDiningCommonsMenuItem")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @DeleteMapping("")
-  public Object deleteRestaurant(@Parameter(name = "id") @RequestParam Long id) {
-    Restaurant restaurant =
-        restaurantRepository
+  public Object deleteUCSBDiningCommonsMenuItem(@Parameter(name = "id") @RequestParam Long id) {
+    UCSBDiningCommonsMenuItem ucsbdiningcommonsmenuitem =
+        ucsbdiningcmmonsmenuitemrepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(Restaurant.class, id));
+            .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
 
-    restaurantRepository.delete(restaurant);
-    return genericMessage("Restaurant with id %s deleted".formatted(id));
+    ucsbdiningcmmonsmenuitemrepository.delete(ucsbdiningcommonsmenuitem);
+    return genericMessage("UCSBDiningCommonsMenuItem with id %s deleted".formatted(id));
   }
-  */
+
   /**
    * Update a single restaurant. Accessible only to users with the role "ROLE_ADMIN".
    *
@@ -106,24 +109,24 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
    * @param incoming the new restaurant contents
    * @return the updated restaurant object
    */
-  /*
-  @Operation(summary = "Update a single restaurant")
+  @Operation(summary = "Update a single UCSBDiningCommonsMenuItem")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PutMapping("")
-  public Restaurant updateRestaurant(
-      @Parameter(name = "id") @RequestParam Long id, @RequestBody @Valid Restaurant incoming) {
+  public UCSBDiningCommonsMenuItem updateUCSBDiningCommonsMenuItem(
+      @Parameter(name = "id") @RequestParam Long id,
+      @RequestBody @Valid UCSBDiningCommonsMenuItem incoming) {
 
-    Restaurant restaurant =
-        restaurantRepository
+    UCSBDiningCommonsMenuItem ucsbdiningcommonsmenuitem =
+        ucsbdiningcmmonsmenuitemrepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(Restaurant.class, id));
+            .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
 
-    restaurant.setName(incoming.getName());
-    restaurant.setDescription(incoming.getDescription());
+    ucsbdiningcommonsmenuitem.setDiningCommonsCode(incoming.getDiningCommonsCode());
+    ucsbdiningcommonsmenuitem.setName(incoming.getName());
+    ucsbdiningcommonsmenuitem.setStation(incoming.getStation());
 
-    restaurantRepository.save(restaurant);
+    ucsbdiningcmmonsmenuitemrepository.save(ucsbdiningcommonsmenuitem);
 
-    return restaurant;
+    return ucsbdiningcommonsmenuitem;
   }
-  */
 }
