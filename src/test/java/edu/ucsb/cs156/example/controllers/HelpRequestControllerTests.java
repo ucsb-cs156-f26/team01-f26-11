@@ -258,11 +258,11 @@ public class HelpRequestControllerTests extends ControllerTestCase {
 
     HelpRequest helpRequestEdited =
         HelpRequest.builder()
-            .requesterEmail("xX_s0l_b4dGuy_Xx623H@email.email")
-            .teamId("team id 48293984848855")
+            .requesterEmail("pleaseworkpleasework@email.email")
+            .teamId("pleasenoerrorpleaseplease442")
             .tableOrBreakoutRoom("table 13458731")
             .requestTime(ldt2)
-            .explanation("test explanation test explanation test explanation ")
+            .explanation("test explanation test explanation test explanation")
             .solved(false)
             .build();
 
@@ -304,7 +304,7 @@ public class HelpRequestControllerTests extends ControllerTestCase {
             .teamId("team id")
             .tableOrBreakoutRoom("table 111111 wow that's a lot of tables")
             .requestTime(ldt1)
-            .explanation("whyd they make the test id 67? help")
+            .explanation("whyd they make the test id 67 help")
             .solved(true)
             .build();
 
