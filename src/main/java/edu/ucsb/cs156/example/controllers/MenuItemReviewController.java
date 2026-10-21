@@ -69,7 +69,7 @@ public class MenuItemReviewController extends ApiController {
     // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     // See: https://www.baeldung.com/spring-date-parameters
 
-    log.info("localDateTime={}", localDateTime);
+    log.info("dateReviewed={}", dateReviewed);
 
     MenuItemReview menuItemReview = new MenuItemReview();
     menuItemReview.setItemid(itemid);
