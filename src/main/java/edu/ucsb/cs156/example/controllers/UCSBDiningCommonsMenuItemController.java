@@ -61,8 +61,9 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
   /**
    * This method creates a new restaurant. Accessible only to users with the role "ROLE_ADMIN".
    *
+   * @param diningCommonsCode
    * @param name name of the restaurant
-   * @param description description of the restaurant
+   * @param station description of the restaurant
    * @return the save restaurant (with it's id field set by the database)
    */
   @Operation(summary = "Create a new UCSBDiningCommonsMenuItem")
