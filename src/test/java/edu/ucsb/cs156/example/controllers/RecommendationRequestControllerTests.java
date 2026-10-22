@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.example.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -345,5 +346,61 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
     verify(recommendationRequestRepository, times(1)).findById(67L);
     Map<String, Object> json = responseToJson(response);
     assertEquals("RecommendationRequest with id 67 not found", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void logged_in_admins_can_delete_when_the_id_exists() throws Exception {
+
+    // arrange
+    LocalDateTime dateRequested = LocalDateTime.parse("2026-10-20T12:00:00");
+    LocalDateTime dateNeeded = LocalDateTime.parse("2026-11-01T00:00:00");
+
+    RecommendationRequest recommendationRequest =
+        RecommendationRequest.builder()
+            .requesterEmail("student@ucsb.edu")
+            .professorEmail("professor@ucsb.edu")
+            .explanation("This is a test explanation.")
+            .dateRequested(dateRequested)
+            .dateNeeded(dateNeeded)
+            .done(true)
+            .build();
+
+    when(recommendationRequestRepository.findById(eq(15L)))
+        .thenReturn(Optional.of(recommendationRequest));
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/recommendationrequests").param("id", "15").with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(recommendationRequestRepository, times(1)).findById(15L);
+    verify(recommendationRequestRepository, times(1)).delete(any());
+
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("RecommendationRequest with id 15 deleted", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void logged_in_admins_cannot_delete_when_the_id_does_not_exist() throws Exception {
+
+    // arrange
+    when(recommendationRequestRepository.findById(eq(15L))).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/recommendationrequests").param("id", "15").with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    // assert
+    verify(recommendationRequestRepository, times(1)).findById(15L);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("RecommendationRequest with id 15 not found", json.get("message"));
   }
 }
