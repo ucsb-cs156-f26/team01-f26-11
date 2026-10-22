@@ -22,6 +22,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MvcResult;
@@ -212,5 +213,95 @@ public class ArticlesControllerTests extends ControllerTestCase {
                 .param("dateAdded", "2005-05-05T05:05:05")
                 .with(csrf()))
         .andExpect(status().is(403)); // only admins can post
+  }
+
+  // edit
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_can_edit_an_existing_article() throws Exception {
+    // arrange
+
+    LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+    LocalDateTime ldt2 = LocalDateTime.parse("2023-01-03T00:00:00");
+
+    Articles articlesOrig =
+        Articles.builder()
+            .title("test1")
+            .url("test.com")
+            .explanation("fun")
+            .email("test@test.com")
+            .dateAdded(ldt1)
+            .build();
+
+    Articles articlesEdited =
+        Articles.builder()
+            .title("test2")
+            .url("test.crum")
+            .explanation("funk")
+            .email("test@test.crum")
+            .dateAdded(ldt2)
+            .build();
+
+    String requestBody = mapper.writeValueAsString(articlesEdited);
+
+    when(articlesRepository.findById(eq(67L))).thenReturn(Optional.of(articlesOrig));
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(
+                put("/api/articles")
+                    .param("id", "67")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(articlesRepository, times(1)).findById(67L);
+    verify(articlesRepository, times(1)).save(articlesEdited); // should be saved with correct user
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(requestBody, responseString);
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_cannot_edit_article_that_does_not_exist() throws Exception {
+    // arrange
+
+    LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+    Articles articlesEdited =
+        Articles.builder()
+            .title("test1")
+            .url("test.com")
+            .explanation("fun")
+            .email("test@test.com")
+            .dateAdded(ldt1)
+            .build();
+
+    String requestBody = mapper.writeValueAsString(articlesEdited);
+
+    when(articlesRepository.findById(eq(67L))).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(
+                put("/api/articles")
+                    .param("id", "67")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("utf-8")
+                    .content(requestBody)
+                    .with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    // assert
+    verify(articlesRepository, times(1)).findById(67L);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("Articles with id 67 not found", json.get("message"));
   }
 }
