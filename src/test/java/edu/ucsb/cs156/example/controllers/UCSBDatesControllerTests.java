@@ -217,7 +217,6 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
     assertEquals(expectedJson, responseString);
   }
 
-  // delete tests
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
   public void admin_can_delete_a_date() throws Exception {
