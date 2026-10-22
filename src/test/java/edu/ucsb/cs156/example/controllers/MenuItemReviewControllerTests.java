@@ -17,6 +17,8 @@ import edu.ucsb.cs156.example.testconfig.TestConfig;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -44,15 +46,17 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
   @WithMockUser(roles = {"USER"})
   @Test
   public void logged_in_users_can_get_all() throws Exception {
-    mockMvc.perform(get("/api/menuitemreview/all")).andExpect(status().is(200)); // logged
+    mockMvc
+        .perform(get("/api/menuitemreview/all"))
+        .andExpect(status().is(200)); // logged in users can't get all
   }
 
-  // @Test
-  // public void logged_out_users_cannot_get_by_id() throws Exception {
-  //     mockMvc
-  //         .perform(get("/api/ucsbdates").param("id", "7"))
-  //         .andExpect(status().is(403)); // logged out users can't get by id
-  // }
+  @Test
+  public void logged_out_users_cannot_get_by_id() throws Exception {
+    mockMvc
+        .perform(get("/api/menuitemreview").param("id", "7"))
+        .andExpect(status().is(403)); // logged out users can't get by id
+  }
 
   // Authorization tests for /api/ucsbdates/post
   // (Perhaps should also have these for put and delete)
@@ -88,60 +92,61 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
 
   // // Tests with mocks for database actions
 
-  // @WithMockUser(roles = {"USER"})
-  // @Test
-  // public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
 
-  //     // arrange
-  //     LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
+    // arrange
+    LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
 
-  //     UCSBDate ucsbDate =
-  //         UCSBDate.builder()
-  //             .name("firstDayOfClasses")
-  //             .quarterYYYYQ("20222")
-  //             .localDateTime(ldt)
-  //             .build();
+    MenuItemReview menuItemReview =
+        MenuItemReview.builder()
+            .itemid(1)
+            .reviewerEmail("cgaucho@ucsb.edu")
+            .stars(5)
+            .dateReviewed(ldt)
+            .comments("what do I think?")
+            .build();
 
-  //     when(ucsbDateRepository.findById(eq(7L))).thenReturn(Optional.of(ucsbDate));
+    when(menuItemReviewRepository.findById(eq(7L))).thenReturn(Optional.of(menuItemReview));
 
-  //     // act
-  //     MvcResult response =
-  //         mockMvc
-  //             .perform(get("/api/ucsbdates").param("id", "7"))
-  //             .andExpect(status().isOk())
-  //             .andReturn();
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(get("/api/menuitemreview").param("id", "7"))
+            .andExpect(status().isOk())
+            .andReturn();
 
-  //     // assert
+    // assert
 
-  //     verify(ucsbDateRepository, times(1)).findById(eq(7L));
-  //     String expectedJson = mapper.writeValueAsString(ucsbDate);
-  //     String responseString = response.getResponse().getContentAsString();
-  //     assertEquals(expectedJson, responseString);
-  // }
+    verify(menuItemReviewRepository, times(1)).findById(eq(7L));
+    String expectedJson = mapper.writeValueAsString(menuItemReview);
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(expectedJson, responseString);
+  }
 
-  // @WithMockUser(roles = {"USER"})
-  // @Test
-  // public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws
-  // Exception {
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
 
-  //     // arrange
+    // arrange
 
-  //     when(ucsbDateRepository.findById(eq(7L))).thenReturn(Optional.empty());
+    when(menuItemReviewRepository.findById(eq(7L))).thenReturn(Optional.empty());
 
-  //     // act
-  //     MvcResult response =
-  //         mockMvc
-  //             .perform(get("/api/ucsbdates").param("id", "7"))
-  //             .andExpect(status().isNotFound())
-  //             .andReturn();
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(get("/api/menuitemreview").param("id", "7"))
+            .andExpect(status().isNotFound())
+            .andReturn();
 
-  //     // assert
+    // assert
 
-  //     verify(ucsbDateRepository, times(1)).findById(eq(7L));
-  //     Map<String, Object> json = responseToJson(response);
-  //     assertEquals("EntityNotFoundException", json.get("type"));
-  //     assertEquals("UCSBDate with id 7 not found", json.get("message"));
-  // }
+    verify(menuItemReviewRepository, times(1)).findById(eq(7L));
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("EntityNotFoundException", json.get("type"));
+    assertEquals("MenuItemReview with id 7 not found", json.get("message"));
+  }
 
   @WithMockUser(roles = {"USER"})
   @Test
@@ -240,7 +245,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
   //             .localDateTime(ldt1)
   //             .build();
 
-  //     when(ucsbDateRepository.findById(eq(15L))).thenReturn(Optional.of(ucsbDate1));
+  //     when(menuItemReviewRepository.findById(eq(15L))).thenReturn(Optional.of(ucsbDate1));
 
   //     // act
   //     MvcResult response =
@@ -250,8 +255,8 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
   //             .andReturn();
 
   //     // assert
-  //     verify(ucsbDateRepository, times(1)).findById(15L);
-  //     verify(ucsbDateRepository, times(1)).delete(any());
+  //     verify(menuItemReviewRepository, times(1)).findById(15L);
+  //     verify(menuItemReviewRepository, times(1)).delete(any());
 
   //     Map<String, Object> json = responseToJson(response);
   //     assertEquals("UCSBDate with id 15 deleted", json.get("message"));
@@ -263,7 +268,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
   //     throws Exception {
   //     // arrange
 
-  //     when(ucsbDateRepository.findById(eq(15L))).thenReturn(Optional.empty());
+  //     when(menuItemReviewRepository.findById(eq(15L))).thenReturn(Optional.empty());
 
   //     // act
   //     MvcResult response =
@@ -273,7 +278,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
   //             .andReturn();
 
   //     // assert
-  //     verify(ucsbDateRepository, times(1)).findById(15L);
+  //     verify(menuItemReviewRepository, times(1)).findById(15L);
   //     Map<String, Object> json = responseToJson(response);
   //     assertEquals("UCSBDate with id 15 not found", json.get("message"));
   // }
@@ -302,7 +307,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
 
   //     String requestBody = mapper.writeValueAsString(ucsbDateEdited);
 
-  //     when(ucsbDateRepository.findById(eq(67L))).thenReturn(Optional.of(ucsbDateOrig));
+  //     when(menuItemReviewRepository.findById(eq(67L))).thenReturn(Optional.of(ucsbDateOrig));
 
   //     // act
   //     MvcResult response =
@@ -318,8 +323,9 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
   //             .andReturn();
 
   //     // assert
-  //     verify(ucsbDateRepository, times(1)).findById(67L);
-  //     verify(ucsbDateRepository, times(1)).save(ucsbDateEdited); // should be saved with correct
+  //     verify(menuItemReviewRepository, times(1)).findById(67L);
+  //     verify(menuItemReviewRepository, times(1)).save(ucsbDateEdited); // should be saved with
+  // correct
   // user
   //     String responseString = response.getResponse().getContentAsString();
   //     assertEquals(requestBody, responseString);
@@ -341,7 +347,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
 
   //     String requestBody = mapper.writeValueAsString(ucsbEditedDate);
 
-  //     when(ucsbDateRepository.findById(eq(67L))).thenReturn(Optional.empty());
+  //     when(menuItemReviewRepository.findById(eq(67L))).thenReturn(Optional.empty());
 
   //     // act
   //     MvcResult response =
@@ -357,7 +363,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
   //             .andReturn();
 
   //     // assert
-  //     verify(ucsbDateRepository, times(1)).findById(67L);
+  //     verify(menuItemReviewRepository, times(1)).findById(67L);
   //     Map<String, Object> json = responseToJson(response);
   //     assertEquals("UCSBDate with id 67 not found", json.get("message"));
   // }
