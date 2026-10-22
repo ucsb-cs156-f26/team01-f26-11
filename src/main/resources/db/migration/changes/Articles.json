@@ -35,20 +35,32 @@
                   },
                   {
                     "column": {
-                      "name": "LOCAL_DATE_TIME",
-                      "type": "TIMESTAMP"
-                    }
-                  },
-                  {
-                    "column": {
-                      "name": "NAME",
+                      "name": "TITLE",
                       "type": "VARCHAR(255)"
                     }
                   },
                   {
-                    "column": {
-                      "name": "QUARTERYYYYQ",
-                      "type": "VARCHAR(255)"
+              "column": {
+                "name": "URL",
+                "type": "VARCHAR(255)"
+              }
+                  },
+                  {
+              "column": {
+                "name": "EXPLANATION",
+                "type": "VARCHAR(255)"
+              }
+                  },
+                  {
+              "column": {
+                "name": "EMAIL",
+                "type": "VARCHAR(255)"
+              }
+                  },
+                  {
+                "column": {
+                  "name": "DATE_ADDED",
+                  "type": "TIMESTAMP"
                     }
                   }
                 ],
