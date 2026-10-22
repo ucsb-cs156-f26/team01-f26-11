@@ -70,27 +70,28 @@ import org.springframework.web.bind.annotation.RestController;
 <span class="fc" id="L70">    log.info(&quot;dateAdded={}&quot;, dateAdded);</span>
 
 <span class="fc" id="L72">    Articles article = new Articles();</span>
-<span class="fc" id="L73">    article.setTitle(title);</span>
-<span class="fc" id="L74">    article.setUrl(url);</span>
-<span class="fc" id="L75">    article.setExplanation(explanation);</span>
-<span class="fc" id="L76">    article.setEmail(email);</span>
-<span class="fc" id="L77">    article.setDateAdded(dateAdded);</span>
 
-<span class="fc" id="L79">    Articles savedArticle = articlesRepository.save(article);</span>
+<span class="fc" id="L74">    article.setTitle(title);</span>
+<span class="fc" id="L75">    article.setUrl(url);</span>
+<span class="fc" id="L76">    article.setExplanation(explanation);</span>
+<span class="fc" id="L77">    article.setEmail(email);</span>
+<span class="fc" id="L78">    article.setDateAdded(dateAdded);</span>
 
-<span class="fc" id="L81">    return savedArticle;</span>
+<span class="fc" id="L80">    Articles savedArticle = articlesRepository.save(article);</span>
+
+<span class="fc" id="L82">    return savedArticle;</span>
   }
 
   @Operation(summary = &quot;Get a single date&quot;)
   @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
   @GetMapping(&quot;&quot;)
   public Articles getById(@Parameter(name = &quot;id&quot;) @RequestParam Long id) {
-<span class="nc" id="L88">    Articles articles =</span>
+<span class="fc" id="L89">    Articles articles =</span>
         articlesRepository
-<span class="nc" id="L90">            .findById(id)</span>
-<span class="nc" id="L91">            .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
+<span class="fc" id="L91">            .findById(id)</span>
+<span class="fc" id="L92">            .orElseThrow(() -&gt; new EntityNotFoundException(Articles.class, id));</span>
 
-<span class="nc" id="L93">    return articles;</span>
+<span class="fc" id="L94">    return articles;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
