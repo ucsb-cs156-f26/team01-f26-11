@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.example.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -232,57 +233,59 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
     assertEquals(expectedJson, responseString);
   }
 
-  // @WithMockUser(roles = {"ADMIN", "USER"})
-  // @Test
-  // public void admin_can_delete_a_date() throws Exception {
-  //     // arrange
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_can_delete_a_review() throws Exception {
+    // arrange
 
-  //     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+    LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-  //     UCSBDate ucsbDate1 =
-  //         UCSBDate.builder()
-  //             .name("firstDayOfClasses")
-  //             .quarterYYYYQ("20222")
-  //             .localDateTime(ldt1)
-  //             .build();
+    MenuItemReview menuItemReview1 =
+        MenuItemReview.builder()
+            .itemid(1)
+            .reviewerEmail("cgaucho@ucsb.edu")
+            .stars(5)
+            .dateReviewed(ldt1)
+            .comments("what do I think?")
+            .build();
 
-  //     when(menuItemReviewRepository.findById(eq(15L))).thenReturn(Optional.of(ucsbDate1));
+    when(menuItemReviewRepository.findById(eq(15L))).thenReturn(Optional.of(menuItemReview1));
 
-  //     // act
-  //     MvcResult response =
-  //         mockMvc
-  //             .perform(delete("/api/menuitemreview").param("id", "15").with(csrf()))
-  //             .andExpect(status().isOk())
-  //             .andReturn();
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/menuitemreview").param("id", "15").with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
 
-  //     // assert
-  //     verify(menuItemReviewRepository, times(1)).findById(15L);
-  //     verify(menuItemReviewRepository, times(1)).delete(any());
+    // assert
+    verify(menuItemReviewRepository, times(1)).findById(15L);
+    verify(menuItemReviewRepository, times(1)).delete(any());
 
-  //     Map<String, Object> json = responseToJson(response);
-  //     assertEquals("UCSBDate with id 15 deleted", json.get("message"));
-  // }
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("MenuItemReview with id 15 deleted", json.get("message"));
+  }
 
-  // @WithMockUser(roles = {"ADMIN", "USER"})
-  // @Test
-  // public void admin_tries_to_delete_non_existant_ucsbdate_and_gets_right_error_message()
-  //     throws Exception {
-  //     // arrange
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_tries_to_delete_non_existant_review_and_gets_right_error_message()
+      throws Exception {
+    // arrange
 
-  //     when(menuItemReviewRepository.findById(eq(15L))).thenReturn(Optional.empty());
+    when(menuItemReviewRepository.findById(eq(15L))).thenReturn(Optional.empty());
 
-  //     // act
-  //     MvcResult response =
-  //         mockMvc
-  //             .perform(delete("/api/menuitemreview").param("id", "15").with(csrf()))
-  //             .andExpect(status().isNotFound())
-  //             .andReturn();
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/menuitemreview").param("id", "15").with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
 
-  //     // assert
-  //     verify(menuItemReviewRepository, times(1)).findById(15L);
-  //     Map<String, Object> json = responseToJson(response);
-  //     assertEquals("UCSBDate with id 15 not found", json.get("message"));
-  // }
+    // assert
+    verify(menuItemReviewRepository, times(1)).findById(15L);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("MenuItemReview with id 15 not found", json.get("message"));
+  }
 
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
